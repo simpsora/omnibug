@@ -779,7 +779,6 @@ window.Omnibug = (() => {
             });
         });
 
-        console.log(settings.renameParameters);
         let data = request.data.reduce((groups, item) => {
             if (!item.hidden) {
                 const val = item.group;
