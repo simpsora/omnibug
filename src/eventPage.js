@@ -99,14 +99,23 @@
                 }
             }
 
-            // Parse the URL and join our request info to the parsed data
-            data = Object.assign(
-                data,
-                OmnibugProvider.parseUrl(data.request.url, data.request.postData)
-            );
+            let providerDataArray = OmnibugProvider.parseUrl(data.request.url, data.request.postData);
+            if (!Array.isArray(providerDataArray)) {
+                providerDataArray = [providerDataArray];
+            } else {
+                data.multipleEntriesPerRequest = true;
+            }
 
-            console.log("Matched URL, sending data to devtools", data);
-            tabs[details.tabId].port.postMessage(data);
+            providerDataArray.forEach(providerData => {
+                // Parse the URL and join our request info to the parsed data
+                let finalData = Object.assign(
+                    data,
+                    providerData
+                );
+                console.log("Matched URL, sending data to devtools", finalData);
+                tabs[details.tabId].port.postMessage(finalData);
+            });
+
         },
         { urls: ["<all_urls>"] },
         ["requestBody"]

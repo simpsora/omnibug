@@ -562,10 +562,14 @@ window.Omnibug = (() => {
      *
      * @param requestId
      */
-    function updateRedirectedEntries(requestId) {
+    function updateRedirectedEntries(requestId, multipleEntriesPerRequest) {
         let redirectedEntries = d.querySelectorAll(`.request[data-request-id="${requestId}"]`);
         redirectedEntries.forEach((entry) => {
-            entry.classList.add("redirected");
+            if (multipleEntriesPerRequest) {
+                entry.classList.add("multipled");
+            } else {
+                entry.classList.add("redirected");
+            }
         });
     }
 
@@ -630,7 +634,7 @@ window.Omnibug = (() => {
             body = createElement("div");
 
         // Update any redirected entries
-        updateRedirectedEntries(request.request.id);
+        updateRedirectedEntries(request.request.id, request.multipleEntriesPerRequest);
 
         // Setup parent details element
         if (settings.alwaysExpand) {
@@ -653,6 +657,16 @@ window.Omnibug = (() => {
                     "title": "This entry was redirected."
                 },
                 "children": [colTitleRedirectIcon]
+            }),
+            colTitleMultipleIcon = createElement("i", {
+                "classes": ["fas", "fa-table"]
+            }),
+            colTitleMultiple = createElement("small", {
+                "classes": ["multiple", "multiple-icon"],
+                "attributes": {
+                    "title": "This entry was part of a single request."
+                },
+                "children": [colTitleMultipleIcon]
             }),
             colAccount = createElement("div", {
                 "classes": ["column", "col-3", "col-lg-4", "col-md-4", "col-sm-5"]
@@ -680,7 +694,7 @@ window.Omnibug = (() => {
 
         let colTitleWrapper = createElement("div", {
             "classes": ["column", "col-3", "col-lg-4", "col-md-4", "col-sm-5"],
-            "children": [requestTypeEl, colTitleSpan, colTitleRedirect],
+            "children": [requestTypeEl, colTitleSpan, colTitleRedirect, colTitleMultiple],
             "attributes": {
                 "title": `${request.provider.name} ${requestTypeValue.value}`
             }

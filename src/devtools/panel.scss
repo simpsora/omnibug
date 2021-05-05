@@ -157,8 +157,25 @@ nav.navbar {
 .request:not(.redirected) .redirect {
   display: none;
 }
+.request:not(.multipled) .multiple {
+  display: none;
+}
 .request.redirected {
   .redirect-icon {
+    margin-left: .5em;
+    color: $gray-color;
+  }
+  .request-note {
+    margin-top: 0.4rem;
+  }
+}
+.request.redirected:hover {
+  .redirect-icon {
+    color: $warning-color;
+  }
+}
+.request.multipled {
+  .multiple-icon {
     margin-left: .5em;
     color: $gray-color;
   }
